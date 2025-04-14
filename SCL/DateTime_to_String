@@ -1,0 +1,54 @@
+Input									
+Output									
+  Date_String	String	''	False	True	True	True	False		
+	Time_String	String	''	False	True	True	True	False		
+	DateTime_String	String	''	False	True	True	True	False		
+InOut									
+Static									
+	LocalTime	DTL	DTL#1970-01-01-00:00:00	False	True	True	True	False		
+	DT_Ret	Int	0	False	True	True	True	False		
+  LocalTime_String	"DT_String"		False	True	True	True	False		
+
+
+#################################################################################################################################
+//=============================================================================
+// Company// (c)Copyright (year)   Siemens AG 2016 All rights reserved
+//-----------------------------------------------------------------------------
+// Library:      (that the source is dedicated to)
+// Tested with:  (test system with FW version)
+// Engineering:   TIA Portal (SW version)
+// Restrictions: (OB types, etc.)
+// Requirements: (hardware, technological package, memory needed, etc.)
+// Functionality:(that is implemented in the block)
+// -----------------------------------------------------------------------------
+// Change log table:
+// Version  Date        Expert in charge Changes applied
+// 01.00.00 dd.mm.yyyy (Name of expert)  First released version
+//=============================================================================
+
+// Read local time instruction
+#DT_Ret := RD_LOC_T(#LocalTime);
+
+// Convert Date and Time to String
+#LocalTime_String.Year := DELETE(IN := UINT_TO_STRING(IN := #LocalTime.YEAR), L := 1, P := 1);
+#LocalTime_String.Month := DELETE(IN := USINT_TO_STRING(IN := #LocalTime.MONTH), L := 1, P := 1);
+#LocalTime_String.Day := DELETE(IN := USINT_TO_STRING(IN := #LocalTime.DAY), L := 1, P := 1);
+#LocalTime_String.Hour := DELETE(IN := USINT_TO_STRING(IN := #LocalTime.HOUR), L := 1, P := 1);
+#LocalTime_String.Minute := DELETE(IN := USINT_TO_STRING(IN := #LocalTime.MINUTE), L := 1, P := 1);
+#LocalTime_String.Second := DELETE(IN := USINT_TO_STRING(IN := #LocalTime.SECOND), L := 1, P := 1);
+
+// Concat Date String
+#Date_String := CONCAT_STRING(IN1 := #LocalTime_String.Year, IN2 := '/');
+#Date_String := CONCAT_STRING(IN1 := #Date_String, IN2 := #LocalTime_String.Month);
+#Date_String := CONCAT_STRING(IN1 := #Date_String, IN2 := '/');
+#Date_String := CONCAT_STRING(IN1 := #Date_String, IN2 := #LocalTime_String.Day);
+
+// Concat Time String
+#Time_String := CONCAT_STRING(IN1 := #LocalTime_String.Hour, IN2 := ':');
+#Time_String := CONCAT_STRING(IN1 := #Time_String, IN2 := #LocalTime_String.Minute);
+#Time_String := CONCAT_STRING(IN1 := #Time_String, IN2 := ':');
+#Time_String := CONCAT_STRING(IN1 := #Time_String, IN2 := #LocalTime_String.Second);
+
+// Concat Date Time String
+#DateTime_String := CONCAT_STRING(IN1 := #Date_String, IN2 := ' - ');
+#DateTime_String := CONCAT_STRING(IN1 := #DateTime_String, IN2 := #Time_String);
